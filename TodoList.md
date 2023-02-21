@@ -19,7 +19,8 @@
     - Simple Dash Board - Done
     - Create new leads
         - New app - Done
-        - new models
+        - new models - Done
+        - Add New Lead
         - Views/Forms for leads
         - List out the details of the list
         - View details of the leads
