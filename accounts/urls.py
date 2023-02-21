@@ -11,5 +11,5 @@ urlpatterns = [
     path("login/", views.LoginView.as_view(), name="login"),
     path("signup/", views.SignUpView.as_view(), name="signup"),
     path("logout/", LogoutView.as_view(next_page=reverse_lazy("accounts:login")), name='logout'),
-    path("profile", views.ProfileView.as_view(), name="profile"),
+    path("", views.ProfileView.as_view(), name="profile"),
 ]
