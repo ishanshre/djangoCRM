@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+
+.env
+media/
+*/.env
+*/*/.env
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+*/*/*/*__pycache__/
 # Distribution / packaging
 .Python
 build/
