@@ -23,5 +23,7 @@
     <p class="mb-6">{{ lead.modified_at|timesince }} ago</p>
 
     <a href="{% url 'lead:leadList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
+    <a href="{% url 'lead:leadUpdate' lead.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
+    <a href="{% url 'lead:leadDelete' lead.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a>
 </div>
 {% endblock %}
