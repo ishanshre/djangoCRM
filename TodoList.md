@@ -1,0 +1,22 @@
+# Todolist
+    - Create Virtual Environments using pipenv - Done
+    - Install Django and python-dotenv - Done
+    - Setup project - Done
+    - setup media files - Done
+    - Create custom user model - Done
+    - Customize Admin pannel according to user model - Done
+    - Create Tests for custom user model and its related admin - Done
+    - Base templated
+        - Create base template
+        - Create front page
+        - Create About page
+        - Create Contact Us page
+    - Authentication
+    - Simple Dash Board
+    - Create new leads
+    - Change and Delete leads
+    - Convert leads to client 
+    - Change and Delete client
+    - Implement solutions for teams
+    - Implement Payment Solition / Monthly recurring payments
+    - Deploy the Project
