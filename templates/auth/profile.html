@@ -1,0 +1,12 @@
+{% extends "base/base.html" %}
+{% block title %}{{ request.user.username|title}}'s Profile{% endblock %}
+
+{% block body %}
+<div>
+    <img src="{{profile.avatar.url}}" alt="{{profile.user.username}}">
+    <p>@{{profile.user.username}}</p>
+    <p>Full Name: {{profile.user.first_name}} {{profile.user.last_name}}</p>
+    <p>Date of Birth: {{profile.user.date_of_birth}}</p>
+    <p>Bio: {{profie.bio}}</p>
+</div>
+{% endblock %}

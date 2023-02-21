@@ -1,15 +1,18 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404, render
 
 from django.views.generic.edit import CreateView
+from django.views import View
 
 from django.contrib.auth.views import LoginView as GenericLoginView
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.urls import reverse_lazy
 
 from django.contrib.messages.views import SuccessMessageMixin
 
 from accounts.forms import LoginForm, SignUpForm
+from accounts.models import Profile
 # Create your views here.
 
 User = get_user_model()
@@ -42,3 +45,14 @@ class LoginView(GenericLoginView):
             return redirect("core:index")
         return super().dispatch(request, *args, **kwargs)
 
+
+class ProfileView(LoginRequiredMixin, View):
+    template_name = "auth/profile.html"
+    def get(self, request, *args, **kwargs):
+        profile = get_object_or_404(Profile, user=request.user)
+        context = {
+            "profile":profile,
+        }
+        return render(request, self.template_name, context)
+    def post(self, request, *args, **kwargs):
+        pass
