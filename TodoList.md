@@ -15,17 +15,17 @@
         - Login and Signup Form - Done
         - Login and SignUp Views, Urls and Templates - Done
         - Logout Urls - Done
-        - Profile
+        - Profile - Done
     - Simple Dash Board - Done
-    - Create new leads
+    - Create new leads 
         - New app - Done
         - new models - Done
-        - Add New Lead
-        - Views/Forms for leads
-        - List out the details of the list
-        - View details of the leads
+        - Add New Lead - Done
+        - Views/Forms for leads - Done
+        - List out the details of the list - Done
+        - View details of the leads - Done
 
-    - Change and Delete leads
+    - Change and Delete leads - Done
     - Convert leads to client 
     - Change and Delete client
     - Implement solutions for teams

@@ -2,8 +2,8 @@
 {% block title %}Create New Lead{% endblock %}
 
 {% block body %}
-<div>
-    <h1>Create New Lead</h1>
+<div class="py-6 px-6">
+    <h1 class="text-2xl">Create New Lead</h1>
     <form method="post">
         {% csrf_token %}
         {{form.as_p}}

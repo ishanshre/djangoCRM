@@ -15,10 +15,11 @@ from lead.models import Lead
 # Create your views here.
 
 
-class LeadCreateView(LoginRequiredMixin,CreateView):
+class LeadCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
     form_class = LeadCreateForm
     template_name = "lead/leadCreate.html"
-    success_url = reverse_lazy("dashboard:dashboard")
+    success_url = reverse_lazy("lead:leadList")
+    success_message = "New Lead Created"
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
