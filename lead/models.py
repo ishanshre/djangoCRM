@@ -26,6 +26,7 @@ class Lead(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     priority = models.CharField(max_length=6, choices=LEAD_PRIORITY.choices, default=LEAD_PRIORITY.LOW)
     status = models.CharField(max_length=9, choices=STATUS_LEAD.choices, default=STATUS_LEAD.NEW)
+    converted_into_clients = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

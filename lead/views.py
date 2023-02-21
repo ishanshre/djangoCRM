@@ -1,17 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
 from django.urls import reverse_lazy, reverse
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
+from django.views import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from django.contrib.messages import success
 from django.contrib.messages.views import SuccessMessageMixin
 
+from django.db.models import Q
+
 from lead.forms import LeadCreateForm
 from lead.models import Lead
+
+from client.models import Client
 # Create your views here.
 
 
@@ -23,7 +28,6 @@ class LeadCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-        success(self.request, "Lead Added Successfully")
         return super().form_valid(form)
 
 
@@ -33,7 +37,7 @@ class LeadListView(LoginRequiredMixin, ListView):
     template_name = "lead/leadList.html"
 
     def get_queryset(self):
-        return Lead.objects.filter(created_by = self.request.user)
+        return Lead.objects.filter(Q(created_by = self.request.user) & Q(converted_into_clients=False))
 
 
 class LeadDetailView(LoginRequiredMixin, DetailView):
@@ -67,3 +71,18 @@ class LeadDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
     def test_func(self):
         self.object = self.get_object()
         return self.object.created_by == self.request.user
+
+
+class ConvertToClient(LoginRequiredMixin, SuccessMessageMixin, View):
+    def get(self, request, *args, **kwargs):
+        lead = get_object_or_404(Lead, created_by=request.user, pk=self.kwargs['pk'])
+        client = Client.objects.create(
+            name=lead.name,
+            email=lead.email,
+            description=lead.description,
+            created_by = request.user
+        )
+        lead.converted_into_clients = True
+        lead.save()
+        success(request, f"successfully converted lead: {lead.name.title()} into client")
+        return redirect("lead:leadList")

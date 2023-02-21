@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'contact.apps.ContactConfig',
     'lead.apps.LeadConfig',
+    'client.apps.ClientConfig',
 ]
 
 MIDDLEWARE = [
