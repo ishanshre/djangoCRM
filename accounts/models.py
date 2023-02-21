@@ -10,3 +10,12 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    avatar = models.ImageField(upload_to="user/profile/avatar", default="user/profile/default.jpeg")
+    bio = models.TextField(max_length=10000, null=True, blank=True)
+    country = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.user.username
