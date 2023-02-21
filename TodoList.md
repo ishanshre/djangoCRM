@@ -16,8 +16,14 @@
         - Login and SignUp Views, Urls and Templates - Done
         - Logout Urls - Done
         - Profile
-    - Simple Dash Board
+    - Simple Dash Board - Done
     - Create new leads
+        - New app - Done
+        - new models
+        - Views/Forms for leads
+        - List out the details of the list
+        - View details of the leads
+
     - Change and Delete leads
     - Convert leads to client 
     - Change and Delete client
