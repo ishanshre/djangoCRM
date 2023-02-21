@@ -1,5 +1,8 @@
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm
+
+from django import forms
 
 User = get_user_model()
 
@@ -17,3 +20,17 @@ class CustomUserChangeForm(UserChangeForm):
             "username",
             "email"
         ]
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(max_length=255)
+    password = forms.CharField(max_length=255, widget=forms.PasswordInput)
+    remember_me = forms.BooleanField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['username','password','remember_me']
+
+class SignUpForm(CustomUserCreationForm):
+    class Meta(CustomUserCreationForm.Meta):
+        model = User
+        fiedls = ['username','email','password1','password2']

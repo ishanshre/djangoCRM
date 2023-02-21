@@ -7,11 +7,15 @@
     - Customize Admin pannel according to user model - Done
     - Create Tests for custom user model and its related admin - Done
     - Base templated
-        - Create base template
-        - Create front page
-        - Create About page
-        - Create Contact Us page
+        - Create base template - Done
+        - Create front page - Done
+        - Create About page - Done
+        - Create Contact Us page - Done
     - Authentication
+        - Login and Signup Form - Done
+        - Login and SignUp Views, Urls and Templates - Done
+        - Logout Urls - Done
+        - Profile
     - Simple Dash Board
     - Create new leads
     - Change and Delete leads
