@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -32,3 +32,9 @@ class LeadListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Lead.objects.filter(created_by = self.request.user)
+
+
+class LeadDetailView(LoginRequiredMixin, DetailView):
+    model = Lead
+    context_object_name = "lead"
+    template_name = "lead/leadDetail.html"

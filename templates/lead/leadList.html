@@ -13,11 +13,13 @@
         <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Status</p>
     </div>
     {% for lead in leads %}
-        <div class="flex justify-between">
-            <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.name}}</p>
-            <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.priority}}</p>
-            <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.status}}</p>
-        </div>
+        <a href="{{ lead.get_absolute_url}}">
+            <div class="flex justify-between">
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.name}}</p>
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.priority}}</p>
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.status}}</p>
+            </div>
+        </a>
     {% endfor %}
 </div>
 {% endblock %}
