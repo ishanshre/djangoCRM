@@ -27,9 +27,9 @@
 
     - Change and Delete leads - Done
     - Convert leads to client - Done
-    - Client List
-    - Client Detail
-    - Change and Delete client
+    - Client List - Done
+    - Client Detail - Done
+    - Change and Delete client - Done
     - Implement solutions for teams
     - Implement Payment Solition / Monthly recurring payments
     - Deploy the Project

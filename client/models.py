@@ -17,6 +17,6 @@ class Client(models.Model):
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     return reverse("lead:leadDetail", args=[self.id])
+    def get_absolute_url(self):
+        return reverse("client:clientDetail", args=[self.id])
      
