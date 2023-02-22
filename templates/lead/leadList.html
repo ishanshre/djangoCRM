@@ -11,6 +11,7 @@
         <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Name</p>
         <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Priority</p>
         <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Status</p>
+        <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Team</p>
     </div>
     {% for lead in leads %}
         <a href="{{ lead.get_absolute_url}}">
@@ -18,6 +19,7 @@
                 <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.name}}</p>
                 <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.priority}}</p>
                 <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.status}}</p>
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{lead.team}}</p>
             </div>
         </a>
     {% empty %}
