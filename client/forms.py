@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.messages import error
 from django.core.exceptions import ValidationError
 
-from client.models import Client, Comment
+from client.models import Client, Comment, ClientFile
 from team.models import Team
 
 class ClientUpdateForm(forms.ModelForm):
@@ -37,3 +37,9 @@ class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['content']
+
+
+class AddFileForm(forms.ModelForm):
+    class Meta:
+        model = ClientFile
+        fields = ['file']

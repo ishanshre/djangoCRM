@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 from django.urls import reverse
 
@@ -10,11 +10,12 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.messages import success
 
 from django.urls import reverse_lazy
 
 from client.models import Client
-from client.forms import ClientUpdateForm, ClientCreateForm, AddCommentForm
+from client.forms import ClientUpdateForm, ClientCreateForm, AddCommentForm, AddFileForm
 # Create your views here.
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -34,6 +35,7 @@ class GetComment(DetailView):
     def get_context_data(self, **kwargs):
         kwargs = super().get_context_data(**kwargs)
         kwargs["comment_form"] = AddCommentForm()
+        kwargs["file_form"] = AddFileForm()
         return kwargs
 
     def get_queryset(self):
@@ -72,6 +74,19 @@ class ClientDetailView(LoginRequiredMixin, View):
         view = PostComment.as_view()
         return view(request, *args, **kwargs)
 
+
+class ClientDetailFileView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        fileUpload = AddFileForm(request.POST, request.FILES)
+        if fileUpload.is_valid():
+            client = Client.objects.get(created_by=request.user, pk=self.kwargs["pk"])
+            file = fileUpload.save(commit=False)
+            file.created_by = request.user
+            file.team = client.team
+            file.client = client
+            file.save()
+            success(request, "Client file uploaded")
+        return redirect("client:clientDetail", pk=self.kwargs['pk'])  
 
 class ClientUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Client
