@@ -1,6 +1,8 @@
 from django import forms
 
-from lead.models import Lead
+from django.core.exceptions import ValidationError
+
+from lead.models import Lead, Comment
 
 from team.models import Team
 
@@ -21,6 +23,12 @@ class LeadCreateForm(forms.ModelForm):
             'priority',
             'status'
         ]
+    
+    def clean_team(self):
+        data = self.cleaned_data['team']
+        if data.plan.max_leads <= data.leads.count():
+            raise ValidationError(f"Lead limit Reached for team: {data}")
+        return data
 
 class LeadUpdateForm(forms.ModelForm):
     team = forms.ModelChoiceField(Team.objects.all())
@@ -39,3 +47,8 @@ class LeadUpdateForm(forms.ModelForm):
             'status'
         ]
 
+
+class AddCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']

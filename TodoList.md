@@ -34,7 +34,18 @@
         - Create New Team app - Done
         - Create Models for team - Done
         - List, Detail, Create, Delete, Update Team - Done
+        - To create lead, first team must be made - Done
+        - To create client, first team must be made - Done
     - Update Profile in same page - Done
     - Customize Dashboard to Show Teams, Clients, Leads list - Done
     - Implement Payment Solition / Monthly recurring payments
+        - Create a plan model - Done
+        - limit the no of client and leads according to plan selected - Done
+    - Add comment 
+        - Create comment model -Done
+        - add comments to Leads - Done
+        - add comments to Clients - 
+    
+    - Refactoring 
+        - install tailswind instead of using CDN - Done
     - Deploy the Project

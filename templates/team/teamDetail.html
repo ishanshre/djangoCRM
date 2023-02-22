@@ -3,25 +3,36 @@
 
 {% block body %}
 <div class="w-1/2 bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
-    <h1 class="mb-4 text-2xl text-center">
-        {{team.name|title}}
-    </h1>
-    {% if team.description %}
-        <p class="font-semibold">Description</p>
-        <p>{{team.description}}</p>
-    {% endif %}
-    <p class="font-semibold">Members</p>
-    <ul>
-        {% for member in team.members.all %}
-            <li>{{member}}</li>
-        {% endfor %}
-    </ul>    
-
-    <p class="font-semibold">Created At</p>
-    <p class="mb-2">{{ team.created_at|timesince }} ago</p>
-
-    <p class="font-semibold">Modified At</p>
-    <p class="mb-6">{{ team.modified_at|timesince }} ago</p>
+    <h1 class="mb-4 text-2xl text-center">{{team.name|title}}</h1>
+    <div class="flex justify-between">
+        <div>
+            {% if team.description %}
+                <p class="font-semibold">Description</p>
+                <p>{{team.description}}</p>
+            {% endif %}
+            <p class="font-semibold">Members</p>
+            <ul>
+                {% for member in team.members.all %}
+                    <li>{{member}}</li>
+                {% endfor %}
+            </ul>    
+        
+            <p class="font-semibold">Created At</p>
+            <p class="mb-2">{{ team.created_at|timesince }} ago</p>
+        
+            <p class="font-semibold">Modified At</p>
+            <p class="mb-2">{{ team.modified_at|timesince }} ago</p>
+        
+            <p class="font-semibold">Plan Selected</p>
+            <p class="mb-6">{{team.plan.name}}</p>
+        </div>
+        <div>
+            <p class="font-semibold">Total Leads Created: {{team.leads.all|length}}</p>
+            <p class="font-semibold">Total Clients Created: {{team.clients.all|length}}</p>
+            <p class="font-semibold">Clients Limit: {{team.plan.max_clients}}</p>
+            <p class="font-semibold">Leads Limit: {{team.plan.max_leads}}</p>
+        </div>
+    </div>
 
     <a href="{% url 'team:teamList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
     <a href="{% url 'team:teamUpdate' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
