@@ -31,5 +31,10 @@
     - Client Detail - Done
     - Change and Delete client - Done
     - Implement solutions for teams
+        - Create New Team app - Done
+        - Create Models for team - Done
+        - List, Detail, Create, Delete, Update Team - Done
+    - Update Profile in same page - Done
+    - Customize Dashboard to Show Teams, Clients, Leads list - Done
     - Implement Payment Solition / Monthly recurring payments
     - Deploy the Project

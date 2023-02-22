@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -10,7 +10,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 
 from client.models import Client
-from client.forms import ClientUpdateForm
+from client.forms import ClientUpdateForm, ClientCreateForm
 # Create your views here.
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -41,6 +41,11 @@ class ClientUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMi
         self.object = self.get_object()
         return self.object.created_by == self.request.user
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
 
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):
     model = Client
@@ -52,5 +57,23 @@ class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMi
         self.object = self.get_object()
         return self.object.created_by == self.request.user
 
+
+class ClientCreateView(LoginRequiredMixin,SuccessMessageMixin, CreateView):
+    form_class = ClientCreateForm
+    template_name = "client/clientCreate.html"
+    success_url = reverse_lazy("client:clientList")
+    success_message = "New Client Created"
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+    
+    def get_form_kwargs(self):
+        """
+        Passing authenticated user to the create form of client
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
 

@@ -4,5 +4,29 @@
 {% block body %}
 <div class="px-6 py-6">
     <h1 class="text-2xl">Dashboard</h1>
+    <!-- Start of client and lead and teams in dashboard-->
+    <div class="flex space-x-4 mb-3">
+        <div class="w-1/2 px-4 py-6 bg-violet-200 rounded-xl leads">
+            <h2 class="text-lg">Newest Teams</h2>
+            {% for team in teams %}
+                <p class="py-1 px-1 m-1 bg-violet-100 rounded-xl">{{team.name}} - <a href="{{team.get_absolute_url}}" class="bg-violet-300 px-1 py-1 rounded-xl">Detail</a></p>
+            {% endfor %}
+        </div>
+        <div class="w-1/2 px-4 py-6 bg-violet-200 rounded-xl leads">
+            <h2 class="text-lg">Newest Leads</h2>
+            {% for lead in leads %}
+                <p class="py-1 px-1 m-1 bg-violet-100 rounded-xl">{{lead.name}} - <a href="{{lead.get_absolute_url}}" class="bg-violet-300 px-1 py-1 rounded-xl">Detail</a></p>
+            {% endfor %}
+        </div>
+
+        <div class="w-1/2 px-4 py-6 bg-violet-200 rounded-xl clients">
+            <h2 class="text-lg">Newest Clients</h2>
+            {% for client in clients %}
+                <p class="py-1 px-1 m-1 bg-violet-100 rounded-xl">{{client.name}} - <a href="{{client.get_absolute_url}}" class="bg-violet-300 px-1 py-1 rounded-xl">Detail</a></p>
+            {% endfor %}
+        </div>
+    </div>
+    <!--End of client and list and teams-->
+    
 </div>
 {% endblock %}

@@ -4,6 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from django import forms
 
+from accounts.models import Profile
+
 User = get_user_model()
 
 class CustomUserCreationForm(UserCreationForm):
@@ -34,3 +36,15 @@ class SignUpForm(CustomUserCreationForm):
     class Meta(CustomUserCreationForm.Meta):
         model = User
         fiedls = ['username','email','password1','password2']
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["avatar","bio","country"]
+
+class UserUpdateForm(CustomUserChangeForm):
+    password = None
+    class Meta:
+        model = User
+        fields = ['first_name','last_name','username','email','date_of_birth']        
