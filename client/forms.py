@@ -10,10 +10,9 @@ class ClientUpdateForm(forms.ModelForm):
 
 class ClientCreateForm(forms.ModelForm):
     team = forms.ModelChoiceField(Team.objects.all())
-    def __init__(self, user=None, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super(ClientCreateForm, self).__init__(*args, **kwargs)
-        if not user:
-            self.fields["team"].queryset = Team.objects.filter(created_by=user)
+        self.fields["team"].queryset = Team.objects.filter(created_by=user)
         
     class Meta:
         model = Client

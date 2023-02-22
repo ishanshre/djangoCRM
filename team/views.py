@@ -27,12 +27,12 @@ class TeamListView(LoginRequiredMixin, ListView):
 
 class TeamDetailView(LoginRequiredMixin, DetailView):
     model = Team
-    template_name = "team/teamDetailView.html"
+    template_name = "team/teamDetail.html"
     context_object_name = "team"
 
     def get_queryset(self):
         try:
-            return Team.objects.get(created_by=self.request.user, pk=self.kwargs["pk"])
+            return Team.objects.filter(created_by=self.request.user, pk=self.kwargs["pk"])
         except Team.DoesNotExist:
             raise Http404("match not found")
 
@@ -46,7 +46,9 @@ class TeamCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        response =  super().form_valid(form)
+        self.object.members.add(self.request.user)
+        return response
 
 
 

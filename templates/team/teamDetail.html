@@ -10,11 +10,12 @@
         <p class="font-semibold">Description</p>
         <p>{{team.description}}</p>
     {% endif %}
-    <p class="font-semibold">Priority</p>
-    <p class="mb-2">{{ team.get_priority_display }}</p>
-    
-    <p class="font-semibold">Status</p>
-    <p class="mb-2">{{ team.get_status_display }}</p>
+    <p class="font-semibold">Members</p>
+    <ul>
+        {% for member in team.members.all %}
+            <li>{{member}}</li>
+        {% endfor %}
+    </ul>    
 
     <p class="font-semibold">Created At</p>
     <p class="mb-2">{{ team.created_at|timesince }} ago</p>
@@ -24,8 +25,6 @@
 
     <a href="{% url 'team:teamList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
     <a href="{% url 'team:teamUpdate' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
-    <a href="{% url 'team:teamDelete' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a>
-    <a href="{% url 'team:teamToClient' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Convert to Client</a>
- 
+    <a href="{% url 'team:teamDelete' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a> 
 </div>
 {% endblock %}
