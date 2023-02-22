@@ -20,7 +20,7 @@ User = get_user_model()
 class SignUpView(SuccessMessageMixin, CreateView):
     form_class = SignUpForm
     template_name = "auth/signup.html"
-    success_url = reverse_lazy("account:login")
+    success_url = reverse_lazy("accounts:login")
     success_message = "User signed up successfull"
 
     def dispatch(self, request, *args, **kwargs):

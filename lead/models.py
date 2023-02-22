@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+
+from team.models import Team
 # Create your models here.
 
 User = get_user_model()
@@ -18,6 +20,7 @@ class Lead(models.Model):
         WON = "WON", 'WON'
         LOST = "LOST", 'Lost'
 
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="leads")
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
     description = models.TextField(null=True, blank=True)

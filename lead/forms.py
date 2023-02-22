@@ -9,6 +9,7 @@ class LeadCreateForm(forms.ModelForm):
         fields = [
             'name',
             'email',
+            'team',
             'description',
             'priority',
             'status'

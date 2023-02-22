@@ -31,5 +31,7 @@
     - Client Detail - Done
     - Change and Delete client - Done
     - Implement solutions for teams
+        - Create New Team app - Done
+        - Create Models for team
     - Implement Payment Solition / Monthly recurring payments
     - Deploy the Project

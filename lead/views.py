@@ -80,7 +80,8 @@ class ConvertToClient(LoginRequiredMixin, SuccessMessageMixin, View):
             name=lead.name,
             email=lead.email,
             description=lead.description,
-            created_by = request.user
+            created_by = request.user,
+            team=lead.team
         )
         lead.converted_into_clients = True
         lead.save()
