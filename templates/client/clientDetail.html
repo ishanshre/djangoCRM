@@ -1,27 +1,53 @@
 {% extends "base/base.html" %}
+{% load tailwind_filters %}
 {% block title %}{{client.name}}{% endblock %}
 
 {% block body %}
-<div class="w-1/2 bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
-    <h1 class="text-2xl text-center font-bold mb-3">
-        {{client.name|title}}
-    </h1>
-    {% if client.description %}
-        <p class="font-semibold">Description</p>
-        <p>{{client.description}}</p>
-    {% endif %}
-
-    <p class="font-semibold">Team</p>
-    <p class="mb-2">{{ client.team }}</p>
-
-    <p class="font-semibold">Created At</p>
-    <p class="mb-2">{{ client.created_at|timesince }} ago</p>
-
-    <p class="font-semibold">Modified At</p>
-    <p class="mb-6">{{ client.modified_at|timesince }} ago</p>
-
-    <a href="{% url 'client:clientList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
-    <a href="{% url 'client:clientUpdate' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
-    <a href="{% url 'client:clientDelete' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a> 
+<div class="flex space-x-4 px-6 py-6">
+    <div class="w-1/2 h-fit bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
+        <h1 class="text-2xl text-center font-bold mb-3">
+            {{client.name|title}}
+        </h1>
+        {% if client.description %}
+            <p class="font-semibold">Description</p>
+            <p>{{client.description}}</p>
+        {% endif %}
+    
+        <p class="font-semibold">Team</p>
+        <p class="mb-2">{{ client.team }}</p>
+    
+        <p class="font-semibold">Created At</p>
+        <p class="mb-2">{{ client.created_at|timesince }} ago</p>
+    
+        <p class="font-semibold">Modified At</p>
+        <p class="mb-6">{{ client.modified_at|timesince }} ago</p>
+    
+        <a href="{% url 'client:clientList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
+        <a href="{% url 'client:clientUpdate' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
+        <a href="{% url 'client:clientDelete' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a> 
+    </div>
+    <div class="w-1/2">
+        <div class="bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
+            <h1 class="text-2xl font-bold">Comments</h1>
+            {% for comment in client.comments.all %}
+                <div class="flex justify-between bg-violet-300 py-4 px-4 rounded-xl m-1">
+                    <div>
+                        <p>{{comment.content}}</p>
+                    </div>
+                    <div>
+                        <p>Created By: @{{comment.created_by|title}}, {{comment.created_at|timesince}} ago</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
+            <h1 class="text-2xl font-bold">Add Comment</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                <button type="submit" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Submit</button>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

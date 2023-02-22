@@ -1,7 +1,11 @@
 from django.shortcuts import get_object_or_404
 
+from django.urls import reverse
+
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView, FormView
+from django.views.generic.detail import SingleObjectMixin
+from django.views import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -10,7 +14,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 
 from client.models import Client
-from client.forms import ClientUpdateForm, ClientCreateForm
+from client.forms import ClientUpdateForm, ClientCreateForm, AddCommentForm
 # Create your views here.
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -22,13 +26,51 @@ class ClientListView(LoginRequiredMixin, ListView):
         return Client.objects.filter(created_by=self.request.user)
 
 
-class ClientDetailView(LoginRequiredMixin, DetailView):
+class GetComment(DetailView):
     model = Client
+    context_object_name = "client"
+    template_name = "client/clientDetail.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs = super().get_context_data(**kwargs)
+        kwargs["comment_form"] = AddCommentForm()
+        return kwargs
+
+    def get_queryset(self):
+        return Client.objects.filter(created_by=self.request.user, pk=self.kwargs["pk"])
+
+class PostComment(SingleObjectMixin, LoginRequiredMixin, FormView):
+    model = Client
+    form_class = AddCommentForm
     context_object_name = "client"
     template_name = "client/clientDetail.html"
 
     def get_queryset(self):
         return Client.objects.filter(created_by=self.request.user, pk=self.kwargs["pk"])
+    
+    def post(self, request, *args, **kwargs): # from SingleObjectMixin returns url paramater
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        comment.client = self.object
+        comment.team = self.object.team
+        comment.created_by = self.request.user
+        comment.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("client:clientDetail", args=[self.object.id])
+
+class ClientDetailView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        view = GetComment.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = PostComment.as_view()
+        return view(request, *args, **kwargs)
 
 
 class ClientUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):

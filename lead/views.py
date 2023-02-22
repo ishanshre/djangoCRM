@@ -52,7 +52,7 @@ class LeadListView(LoginRequiredMixin, ListView):
 
 
 
-class GetComment(DetailView):
+class GetComment(LoginRequiredMixin, DetailView):
     model = Lead
     context_object_name = "lead"
     template_name = "lead/leadDetail.html"
