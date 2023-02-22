@@ -14,11 +14,10 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from django.db.models import Q
 
-from lead.forms import LeadCreateForm, LeadUpdateForm, AddCommentForm
-from lead.models import Lead
+from lead.forms import LeadCreateForm, LeadUpdateForm, AddCommentForm, AddFileForm
+from lead.models import Lead, LeadFile
 
-from client.models import Client
-from client.models import Comment as ClientComment
+from client.models import Client, Comment as ClientComment
 
 # Create your views here.
 
@@ -62,6 +61,7 @@ class GetComment(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         kwargs = super().get_context_data(**kwargs)
         kwargs["comment_form"] = AddCommentForm()
+        kwargs["file_form"] = AddFileForm()
         return kwargs
     
     def get_queryset(self):
@@ -93,7 +93,7 @@ class PostComment(SingleObjectMixin, LoginRequiredMixin, FormView):
         return reverse("lead:leadDetail", args=[self.object.id])
 
 
-class LeadDetailView(View):
+class LeadDetailView(LoginRequiredMixin,View):
     def get(self, request, *args, **kwargs):
         view = GetComment.as_view()
         return view(request, *args, **kwargs)
@@ -102,6 +102,18 @@ class LeadDetailView(View):
         view = PostComment.as_view()
         return view(request, *args, **kwargs)
 
+class LeadDetailFileView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        fileUpload = AddFileForm(request.POST, request.FILES)
+        if fileUpload.is_valid():
+            lead = Lead.objects.get(created_by=request.user, pk=self.kwargs["pk"])
+            file = fileUpload.save(commit=False)
+            file.created_by = request.user
+            file.team = lead.team
+            file.lead = lead
+            file.save()
+            success(request, "Lead file uploaded")
+        return redirect("lead:leadDetail", pk=self.kwargs['pk'])        
 
 class LeadUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin ,UpdateView):
     model = Lead

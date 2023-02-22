@@ -46,6 +46,8 @@
         - add comments to Leads - Done
         - add comments to Clients - Done
         - convert comments from lead to client when converting lead to client - Done
+    - Add file model for lead - Done
+    - Add file model for client
     
     - Refactoring 
         - install tailswind instead of using CDN - Done

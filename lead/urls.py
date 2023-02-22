@@ -10,5 +10,6 @@ urlpatterns  =[
     path("<int:pk>/detail/", views.LeadDetailView.as_view(), name="leadDetail"),
     path("<int:pk>/update/", views.LeadUpdateView.as_view(), name="leadUpdate"),
     path("<int:pk>/delete/", views.LeadDeleteView.as_view(), name="leadDelete"),
+    path("<int:pk>/upload/", views.LeadDetailFileView.as_view(), name="leadUpload"),
     path("<int:pk>/convert-to-client", views.ConvertToClient.as_view(), name="leadToClient"),
 ]
