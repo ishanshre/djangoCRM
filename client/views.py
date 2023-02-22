@@ -41,6 +41,11 @@ class ClientUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMi
         self.object = self.get_object()
         return self.object.created_by == self.request.user
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
 
 class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):
     model = Client

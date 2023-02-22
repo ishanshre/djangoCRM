@@ -13,7 +13,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from django.db.models import Q
 
-from lead.forms import LeadCreateForm
+from lead.forms import LeadCreateForm, LeadUpdateForm
 from lead.models import Lead
 
 from client.models import Client
@@ -53,17 +53,19 @@ class LeadDetailView(LoginRequiredMixin, DetailView):
 
 class LeadUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin ,UpdateView):
     model = Lead
-    form_class = LeadCreateForm
+    form_class = LeadUpdateForm
     context_object_name = "lead"
     template_name = "lead/leadUpdate.html"
     success_message = "Lead Updated Successfully"
 
-    def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
     def test_func(self):
         self.object = self.get_object()
         return self.object.created_by == self.request.user
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
     
 
 class LeadDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):

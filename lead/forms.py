@@ -21,3 +21,21 @@ class LeadCreateForm(forms.ModelForm):
             'priority',
             'status'
         ]
+
+class LeadUpdateForm(forms.ModelForm):
+    team = forms.ModelChoiceField(Team.objects.all())
+
+    def __init__(self, user, *args, **kwargs):
+        super(LeadUpdateForm, self).__init__(*args, **kwargs)
+        self.fields["team"].queryset = Team.objects.filter(created_by=user)
+    class Meta:
+        model = Lead
+        fields = [
+            'name',
+            'email',
+            'team',
+            'description',
+            'priority',
+            'status'
+        ]
+
