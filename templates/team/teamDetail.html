@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+{% block title %}{{team.name}}{% endblock %}
+
+{% block body %}
+<div class="py-6 px-6">
+    <h1 class="mb-4 text-2xl">
+        {{team.name|title}}
+    </h1>
+    {% if team.description %}
+        <p class="font-semibold">Description</p>
+        <p>{{team.description}}</p>
+    {% endif %}
+    <p class="font-semibold">Priority</p>
+    <p class="mb-2">{{ team.get_priority_display }}</p>
+    
+    <p class="font-semibold">Status</p>
+    <p class="mb-2">{{ team.get_status_display }}</p>
+
+    <p class="font-semibold">Created At</p>
+    <p class="mb-2">{{ team.created_at|timesince }} ago</p>
+
+    <p class="font-semibold">Modified At</p>
+    <p class="mb-6">{{ team.modified_at|timesince }} ago</p>
+
+    <a href="{% url 'team:teamList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
+    <a href="{% url 'team:teamUpdate' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
+    <a href="{% url 'team:teamDelete' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a>
+    <a href="{% url 'team:teamToClient' team.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Convert to Client</a>
+ 
+</div>
+{% endblock %}

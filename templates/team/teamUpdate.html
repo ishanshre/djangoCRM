@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+{% block title %}Update :{{team.name}}{% endblock %}
+
+{% block body %}
+<div class="px-6 py-6">
+    <h1 class="text-2xl">Update team :{{team.name|title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="py-4 px-8 bg-violet-400 text-white">Update</button>
+    </form>
+</div>
+{% endblock %}
