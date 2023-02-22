@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 python-dotenv = "*"
 pillow = "*"
+crispy-tailwind = "*"
 
 [dev-packages]
 

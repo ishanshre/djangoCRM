@@ -1,8 +1,9 @@
 {% extends "base/base.html" %}
+{% load tailwind_filters %}
 {% block title %}{{ request.user.username|title}}'s Profile{% endblock %}
 
 {% block body %}
-<div class="w-3/4 ml-auto mt-3 mr-auto mb-3">
+<div class="w-1/2 ml-auto mt-3 mr-auto mb-3">
     <div class="flex space-x-4">
         <div class="px-4 py-4 bg-violet-200 rounded-xl">
             <img src="{{profile.avatar.url}}" alt="{{profile.user.username}}">
@@ -15,8 +16,8 @@
             <h1 class="py-4 px-4 m-2 text-2xl text-center">Update Profile</h1>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{profile_form.as_p}}
-                {{user_form.as_p}}
+                {{profile_form|crispy}}
+                {{user_form|crispy}}
                 <button type="submit" class="py-2 px-2 mt-2 bg-violet-400 rounded-xl">Update</button>
             </form>
         </div>
