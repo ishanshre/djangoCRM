@@ -41,8 +41,11 @@
     - Implement Payment Solition / Monthly recurring payments
         - Create a plan model - Done
         - limit the no of client and leads according to plan selected - Done
-        - 
+    - Add comment 
+        - Create comment model -Done
+        - add comments to Leads - Done
+        - add comments to Clients - 
     
     - Refactoring 
-        - install tailswind instead of using CDN
+        - install tailswind instead of using CDN - Done
     - Deploy the Project

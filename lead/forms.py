@@ -2,7 +2,7 @@ from django import forms
 
 from django.core.exceptions import ValidationError
 
-from lead.models import Lead
+from lead.models import Lead, Comment
 
 from team.models import Team
 
@@ -47,3 +47,8 @@ class LeadUpdateForm(forms.ModelForm):
             'status'
         ]
 
+
+class AddCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']

@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from django.urls import reverse_lazy, reverse
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic import ListView, DetailView
+from django.views.generic.detail import SingleObjectMixin
 from django.views import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -13,7 +14,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from django.db.models import Q
 
-from lead.forms import LeadCreateForm, LeadUpdateForm
+from lead.forms import LeadCreateForm, LeadUpdateForm, AddCommentForm
 from lead.models import Lead
 
 from client.models import Client
@@ -50,10 +51,54 @@ class LeadListView(LoginRequiredMixin, ListView):
         return context
 
 
-class LeadDetailView(LoginRequiredMixin, DetailView):
+
+class GetComment(DetailView):
     model = Lead
     context_object_name = "lead"
     template_name = "lead/leadDetail.html"
+    
+    def get_context_data(self, **kwargs):
+        kwargs = super().get_context_data(**kwargs)
+        kwargs["comment_form"] = AddCommentForm()
+        return kwargs
+    
+    def get_queryset(self):
+        return Lead.objects.filter(created_by=self.request.user, pk=self.kwargs['pk'])
+
+
+class PostComment(SingleObjectMixin, LoginRequiredMixin, FormView):
+    model = Lead
+    form_class = AddCommentForm
+    context_object_name = "lead"
+    template_name = "lead/leadDetailView"
+
+    def get_queryset(self):
+        return Lead.objects.filter(created_by=self.request.user, pk=self.kwargs['pk'])
+    
+    def post(self, request, *args, **kwargs): # from SingleObjectMixin returns url paramater
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        comment.lead = self.object
+        comment.team = self.object.team
+        comment.created_by = self.request.user
+        comment.save()
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse("lead:leadDetail", args=[self.object.id])
+
+
+class LeadDetailView(View):
+    def get(self, request, *args, **kwargs):
+        view = GetComment.as_view()
+        return view(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        view = PostComment.as_view()
+        return view(request, *args, **kwargs)
 
 
 class LeadUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin ,UpdateView):
