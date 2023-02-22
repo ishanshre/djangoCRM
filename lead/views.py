@@ -18,6 +18,8 @@ from lead.forms import LeadCreateForm, LeadUpdateForm, AddCommentForm
 from lead.models import Lead
 
 from client.models import Client
+from client.models import Comment as ClientComment
+
 # Create your views here.
 
 
@@ -145,5 +147,15 @@ class ConvertToClient(LoginRequiredMixin, SuccessMessageMixin, View):
         )
         lead.converted_into_clients = True
         lead.save()
+
+        comments = lead.comments.all()
+        for comment in comments:
+            ClientComment.objects.create(
+                team = comment.team,
+                client=client,
+                created_by=comment.created_by,
+                content=comment.content
+
+            )
         success(request, f"successfully converted lead: {lead.name.title()} into client")
         return redirect("lead:leadList")
