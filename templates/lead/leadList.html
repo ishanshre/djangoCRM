@@ -25,5 +25,32 @@
     {% empty %}
     <p>There are no leads in the database </p>
     {% endfor %}
+
+</div>
+
+<div class="w-3/4 bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
+    <div class="flex justify-between">
+        <h1 class="text-2xl">List of converted Leads</h1>
+        <a href="{% url 'lead:leadCreate' %}" class="py-4 px-6 bg-violet-600 rounded-xl text-white">Create Lead</a>
+    </div>
+    <div class="mt-6 flex justify-between">
+        <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Name</p>
+        <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Priority</p>
+        <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Status</p>
+        <p class="py-4 px-2 bg-gray-200 font-semibold w-full">Team</p>
+    </div>
+    {% for conv_lead in conv_leads %}
+        <a href="{{ conv_lead.get_absolute_url}}">
+            <div class="flex justify-between">
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{conv_lead.name}}</p>
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{conv_lead.priority}}</p>
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{conv_lead.status}}</p>
+                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{conv_lead.team}}</p>
+            </div>
+        </a>
+    {% empty %}
+    <p>There are no converted leads in the database </p>
+    {% endfor %}
+    
 </div>
 {% endblock %}

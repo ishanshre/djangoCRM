@@ -8,7 +8,7 @@ from django.views import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from django.contrib.messages import success
+from django.contrib.messages import success, error
 from django.contrib.messages.views import SuccessMessageMixin
 
 from django.db.models import Q
@@ -43,6 +43,11 @@ class LeadListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Lead.objects.filter(Q(created_by = self.request.user) & Q(converted_into_clients=False))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["conv_leads"] = Lead.objects.filter(Q(created_by = self.request.user) & Q(converted_into_clients=True))
+        return context
 
 
 class LeadDetailView(LoginRequiredMixin, DetailView):
@@ -60,7 +65,7 @@ class LeadUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
 
     def test_func(self):
         self.object = self.get_object()
-        return self.object.created_by == self.request.user
+        return self.object.created_by == self.request.user and self.object.converted_into_clients == False
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -83,6 +88,9 @@ class LeadDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
 class ConvertToClient(LoginRequiredMixin, SuccessMessageMixin, View):
     def get(self, request, *args, **kwargs):
         lead = get_object_or_404(Lead, created_by=request.user, pk=self.kwargs['pk'])
+        if lead.team.plan.max_clients <= lead.team.clients.count():
+            error(request, "Client Limit already reached")
+            return redirect("lead:leadDetail", pk=lead.id)
         client = Client.objects.create(
             name=lead.name,
             email=lead.email,

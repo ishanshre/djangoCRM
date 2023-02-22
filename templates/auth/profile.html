@@ -3,14 +3,16 @@
 {% block title %}{{ request.user.username|title}}'s Profile{% endblock %}
 
 {% block body %}
-<div class="w-1/2 ml-auto mt-3 mr-auto mb-3">
+<div class="w-3/4 ml-auto mt-3 mr-auto mb-3">
     <div class="flex space-x-4">
         <div class="px-4 py-4 bg-violet-200 rounded-xl">
             <img src="{{profile.avatar.url}}" alt="{{profile.user.username}}">
             <p>@{{profile.user.username}}</p>
             <p>Full Name: {{profile.user.first_name}} {{profile.user.last_name}}</p>
             <p>Date of Birth: {{profile.user.date_of_birth}}</p>
-            <p>Bio: {{profie.bio}}</p>
+            <p>Bio: {{profile.bio}}</p>
+            <p>Last Login: {{profile.user.last_login}} | {{profile.user.last_login}}|timesince</p>
+            <p>Joined: {{profile.user.date_joined}} | {{profile.user.date_joined|timesince}}</p>
         </div>
         <div class="px-4 py-4 bg-violet-200 rounded-xl">
             <h1 class="py-4 px-4 m-2 text-2xl text-center">Update Profile</h1>
