@@ -47,4 +47,15 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"lead comment by {self.created_by.username.title()}"
-    
+
+
+class LeadFile(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="lead_files")
+    lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name="files")
+    file = models.FileField(upload_to="files/lead/")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lead_files")
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Lead file by {self.created_by}"

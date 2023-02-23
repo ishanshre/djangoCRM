@@ -2,7 +2,7 @@ from django import forms
 
 from django.core.exceptions import ValidationError
 
-from lead.models import Lead, Comment
+from lead.models import Lead, Comment, LeadFile
 
 from team.models import Team
 
@@ -52,3 +52,8 @@ class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['content']
+
+class AddFileForm(forms.ModelForm):
+    class Meta:
+        model = LeadFile
+        fields = ['file']

@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+
+import csv
 
 from django.urls import reverse_lazy, reverse
 
@@ -14,10 +16,11 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from django.db.models import Q
 
-from lead.forms import LeadCreateForm, LeadUpdateForm, AddCommentForm
-from lead.models import Lead
+from lead.forms import LeadCreateForm, LeadUpdateForm, AddCommentForm, AddFileForm
+from lead.models import Lead, LeadFile
 
-from client.models import Client
+from client.models import Client, Comment as ClientComment
+
 # Create your views here.
 
 
@@ -60,6 +63,7 @@ class GetComment(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         kwargs = super().get_context_data(**kwargs)
         kwargs["comment_form"] = AddCommentForm()
+        kwargs["file_form"] = AddFileForm()
         return kwargs
     
     def get_queryset(self):
@@ -91,7 +95,7 @@ class PostComment(SingleObjectMixin, LoginRequiredMixin, FormView):
         return reverse("lead:leadDetail", args=[self.object.id])
 
 
-class LeadDetailView(View):
+class LeadDetailView(LoginRequiredMixin,View):
     def get(self, request, *args, **kwargs):
         view = GetComment.as_view()
         return view(request, *args, **kwargs)
@@ -100,6 +104,18 @@ class LeadDetailView(View):
         view = PostComment.as_view()
         return view(request, *args, **kwargs)
 
+class LeadDetailFileView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        fileUpload = AddFileForm(request.POST, request.FILES)
+        if fileUpload.is_valid():
+            lead = Lead.objects.get(created_by=request.user, pk=self.kwargs["pk"])
+            file = fileUpload.save(commit=False)
+            file.created_by = request.user
+            file.team = lead.team
+            file.lead = lead
+            file.save()
+            success(request, "Lead file uploaded")
+        return redirect("lead:leadDetail", pk=self.kwargs['pk'])        
 
 class LeadUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin ,UpdateView):
     model = Lead
@@ -145,5 +161,32 @@ class ConvertToClient(LoginRequiredMixin, SuccessMessageMixin, View):
         )
         lead.converted_into_clients = True
         lead.save()
+
+        comments = lead.comments.all()
+        for comment in comments:
+            ClientComment.objects.create(
+                team = comment.team,
+                client=client,
+                created_by=comment.created_by,
+                content=comment.content
+
+            )
         success(request, f"successfully converted lead: {lead.name.title()} into client")
         return redirect("lead:leadList")
+    
+
+class LeadExportView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        leads = Lead.objects.filter(created_by=request.user, converted_into_clients=False)
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={
+                "Content-Disposition":f"attachment; filename='{request.user}-leads.csv'"
+            }
+        )
+        writer = csv.writer(response)
+        writer.writerow([f"Leads of {request.user.username.title()}"])
+        writer.writerow(['Lead','Description','Created by', 'Created at', 'Modified at'])
+        for lead in leads:
+            writer.writerow([lead.name, lead.description, lead.created_by, lead.created_at, lead.modified_at])
+        return response
