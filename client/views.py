@@ -143,12 +143,12 @@ class ClientExportView(LoginRequiredMixin, View):
         response = HttpResponse(
             content_type = "text/csv",
             headers = {
-            "Content-Disposition":"attachment; filename='client.csv'",
+            "Content-Disposition":f"attachment; filename='{request.user.username}-clients.csv'",
             }
         )
         writer = csv.writer(response)
-        writer.writerow(['Client', 'Description','Created at','Created by',"Modified at"])
+        writer.writerow(['Client', 'Description','Created by','Created at',"Modified at"])
         for client in clients:
-            writer.writerow([client.name, client.description, client.created_at, client.created_by, client.modified_at])
+            writer.writerow([client.name, client.description, client.created_by, client.created_at, client.modified_at])
         return response            
         

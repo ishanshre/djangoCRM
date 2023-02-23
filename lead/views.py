@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+
+import csv
 
 from django.urls import reverse_lazy, reverse
 
@@ -171,3 +173,20 @@ class ConvertToClient(LoginRequiredMixin, SuccessMessageMixin, View):
             )
         success(request, f"successfully converted lead: {lead.name.title()} into client")
         return redirect("lead:leadList")
+    
+
+class LeadExportView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        leads = Lead.objects.filter(created_by=request.user, converted_into_clients=False)
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={
+                "Content-Disposition":f"attachment; filename='{request.user}-leads.csv'"
+            }
+        )
+        writer = csv.writer(response)
+        writer.writerow([f"Leads of {request.user.username.title()}"])
+        writer.writerow(['Lead','Description','Created by', 'Created at', 'Modified at'])
+        for lead in leads:
+            writer.writerow([lead.name, lead.description, lead.created_by, lead.created_at, lead.modified_at])
+        return response
