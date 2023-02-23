@@ -4,33 +4,35 @@
 
 {% block body %}
 <div class="flex space-x-4 px-6 py-6">
-    <div class="w-1/2 h-fit bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
-        <h1 class="text-2xl text-center font-bold mb-3">
-            {{client.name|title}}
-        </h1>
-        {% if client.description %}
-            <p class="font-semibold">Description</p>
-            <p>{{client.description}}</p>
-        {% endif %}
-    
-        <p class="font-semibold">Team</p>
-        <p class="mb-2">{{ client.team }}</p>
-    
-        <p class="font-semibold">Created At</p>
-        <p class="mb-2">{{ client.created_at|timesince }} ago</p>
-    
-        <p class="font-semibold">Modified At</p>
-        <p class="mb-6">{{ client.modified_at|timesince }} ago</p>
-    
-        <a href="{% url 'client:clientList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
-        <a href="{% url 'client:clientUpdate' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
-        <a href="{% url 'client:clientDelete' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a> 
+    <div class="w-1/2">
+        <div class="h-fit bg-violet-200 rounded-xl px-6 py-6 ml-auto mt-3 mr-auto mb-3">
+            <h1 class="text-2xl text-center font-bold mb-3">
+                {{client.name|title}}
+            </h1>
+            {% if client.description %}
+                <p class="font-semibold">Description</p>
+                <p>{{client.description}}</p>
+            {% endif %}
+        
+            <p class="font-semibold">Team</p>
+            <p class="mb-2">{{ client.team }}</p>
+        
+            <p class="font-semibold">Created At</p>
+            <p class="mb-2">{{ client.created_at|timesince }} ago</p>
+        
+            <p class="font-semibold">Modified At</p>
+            <p class="mb-6">{{ client.modified_at|timesince }} ago</p>
+        
+            <a href="{% url 'client:clientList' %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Back to List</a>
+            <a href="{% url 'client:clientUpdate' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Update</a>
+            <a href="{% url 'client:clientDelete' client.id %}" class="bg-violet-400 text-white py-4 px-6 rounded-xl">Delete</a> 
+        </div>
         <div>
             <div class="bg-violet-200 px-4 py-4 rounded-xl">
                 <h1>Uploaded Files</h1>
             <ul>
                 {% for file in client.files.all %}
-                    <li><a href="{{file.file.url}}">File {{forloop.counter}}</a></li>
+                    <li><a href="{{file.file.url}}">File {{forloop.counter}} Download</a></li>
                 {% endfor %}
             </ul>
             </div>

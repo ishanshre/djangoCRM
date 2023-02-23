@@ -1,4 +1,6 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, HttpResponse
+
+import csv
 
 from django.urls import reverse
 
@@ -134,3 +136,19 @@ class ClientCreateView(LoginRequiredMixin,SuccessMessageMixin, CreateView):
         return kwargs
 
 
+
+class ClientExportView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        clients = Client.objects.filter(created_by=request.user)
+        response = HttpResponse(
+            content_type = "text/csv",
+            headers = {
+            "Content-Disposition":"attachment; filename='client.csv'",
+            }
+        )
+        writer = csv.writer(response)
+        writer.writerow(['Client', 'Description','Created at','Created by',"Modified at"])
+        for client in clients:
+            writer.writerow([client.name, client.description, client.created_at, client.created_by, client.modified_at])
+        return response            
+        
